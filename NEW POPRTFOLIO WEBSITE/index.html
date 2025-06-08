@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0a0a0a;
+            color: #f0f0f0;
+            overflow-x: hidden;
+        }
+        
+        header {
+            padding: 2rem;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            transition: background-color 0.3s ease;
+        }
+        
+        header.scrolled {
+            background-color: rgba(10, 10, 10, 0.95);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f0f0f0;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: #f0f0f0;
+            text-decoration: none;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #64ffda;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #64ffda;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+            padding: 0 2rem;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.8s forwards;
+            animation-delay: 0.3s;
+        }
+        
+        .hero h2 {
+            font-size: 2rem;
+            color: #64ffda;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.8s forwards;
+            animation-delay: 0.6s;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.8s forwards;
+            animation-delay: 0.9s;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background-color: transparent;
+            border: 2px solid #64ffda;
+            color: #64ffda;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.8s forwards;
+            animation-delay: 1.2s;
+        }
+        
+        .cta-button:hover {
+            background-color: rgba(100, 255, 218, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .scene-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.5;
+        }
+        
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background-color: #64ffda;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .project-card {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px) rotateY(5deg);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .project-image {
+            height: 250px;
+            width: 100%;
+            background-color: #333;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .project-card:hover .project-image img {
+            transform: scale(1.1);
+        }
+        
+        .project-content {
+            padding: 1.5rem;
+        }
+        
+        .project-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #64ffda;
+        }
+        
+        .project-description {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #b3b3b3;
+        }
+        
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        
+        .tag {
+            padding: 0.3rem 0.8rem;
+            background-color: rgba(100, 255, 218, 0.1);
+            color: #64ffda;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .project-links {
+            display: flex;
+        }
+        
+        .project-link {
+            color: #f0f0f0;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+        
+        .project-link:hover {
+            color: #64ffda;
+        }
+        
+        .about {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #64ffda;
+        }
+        
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: #b3b3b3;
+        }
+        
+        .about-image {
+            position: relative;
+            perspective: 1000px;
+            width: 100%;
+        }
+        
+        .about-image-wrapper {
+            position: relative;
+            width: 80%;
+            margin: 0 auto;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        
+        .about-image:hover .about-image-wrapper {
+            transform: rotateY(10deg) rotateX(5deg);
+        }
+        
+        .about-image img {
+            width: 90%;
+            border-radius:1px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .skills {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .skill {
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .skill:hover {
+            transform: translateY(-10px);
+        }
+        
+        .skill-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #64ffda;
+        }
+        
+        .skill-name {
+            font-size: 1.1rem;
+            color: #f0f0f0;
+        }
+        
+        .contact {
+            text-align: center;
+        }
+        
+        .contact p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+            color: #b3b3b3;
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            color: #f0f0f0;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #64ffda;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background-color: transparent;
+            border: 2px solid #64ffda;
+            color: #64ffda;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background-color: rgba(100, 255, 218, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        footer {
+            padding: 2rem;
+            text-align: center;
+            background-color: #0a0a0a;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .social-icons{
+            margin: 20px;
+            padding: 10px;
+        }
+        .social-icons img{
+            margin: 10px;
+        }
+        .contact-left p{
+            margin: 10px;
+            display: block;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        .kellycv a{
+            color: darkorange;
+            font-size: 23px;
+            font-weight: bold;
+            line-height: 2px;
+        }
+        .subtitle p{
+            margin: 16px;
+        }
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #f0f0f0;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background-color: rgba(100, 255, 218, 0.1);
+            color: #64ffda;
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            color: #b3b3b3;
+        }
+        
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.6rem;
+            }
+            
+            .about {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .about-image {
+                margin-top: 2rem;
+            }
+            
+            .about-image::before {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.4rem;
+            }
+            
+            .projects {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <nav>
+            <a href="#" class="logo">Portfolio</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div id="scene-container" class="scene-container"></div>
+        <div class="hero-content">
+            <h1>Hello, I'm <span class="highlight">Kelvin</span></h1>
+            <h2>Creative Developer & Designer</h2>
+            <p>I create captivating digital experiences through innovative development and thoughtful design, bringing ideas to life with clean code and stunning visuals.</p>
+            <a href="#projects" class="cta-button">View My Work</a>
+        </div>
+    </section>
+
+    <section id="projects" class="section">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="projects">
+            <div class="project-card">
+                <a href="https://kiptoi-market.netlify.app" style="text-decoration: none;">
+                    <div class="project-image">
+                        <img src="images/commerce.jpg" alt="Project 1">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">E-Commerce Platform</h3>
+                        <p class="project-description">A modern e-commerce platform with advanced filtering, cart functionality, and secure payment processing.</p>
+                        <div class="project-tags">
+                            <span class="tag">React</span>
+                            <span class="tag">Node.js</span>
+                            <span class="tag">MongoDB</span>
+                        </div>
+                    </div>
+                </a>
+              
+            </div>
+            
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="images/threeD.jpg" alt="Project 2">
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">3D Product Visualization</h3>
+                    <p class="project-description">Interactive 3D product viewer allowing users to examine products from all angles with customization options.</p>
+                    <div class="project-tags">
+                        <span class="tag">Three.js</span>
+                        <span class="tag">WebGL</span>
+                        <span class="tag">GSAP</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="images/dash.jpg" alt="Project 3">
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Dashboard Analytics</h3>
+                    <p class="project-description">Data visualization dashboard featuring real-time updates, interactive charts, and customizable reporting.</p>
+                    <div class="project-tags">
+                        <span class="tag">Vue.js</span>
+                        <span class="tag">D3.js</span>
+                        <span class="tag">Firebase</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <h2 class="section-title">About Me</h2>
+        <div class="about">
+            <div class="about-text">
+                <h3>A bit about myself</h3>
+                <p>I'm a creative developer with over almost 2 years of experience crafting digital experiences that engage users and solve real-world problems. My passion lies at the intersection of design and technology, where I transform ideas into functional, beautiful solutions.</p>
+                <p>When I'm not coding, you can find me experimenting with new web technologies, contributing to open-source projects, or exploring nature for fresh inspiration.</p>
+                <p>I'm always open to new opportunities and collaborations, so feel free to reach out if you'd like to create something amazing together!</p>
+            </div>
+            <div class="about-image">
+                <div class="about-image-wrapper">
+                    <img src="images/kellypic.jpg" alt="Profile Picture">
+                </div>
+            </div>
+        </div>
+        
+        <div class="skills">
+            <div class="skill">
+                <div class="skill-icon">💻</div>
+                <div class="skill-name">HTML/CSS</div>
+            </div>
+            <div class="skill">
+                <div class="skill-icon">📱</div>
+                <div class="skill-name">JavaScript</div>
+            </div>
+            <div class="skill">
+                <div class="skill-icon">⚛️</div>
+                <div class="skill-name">React</div>
+            </div>
+            <div class="skill">
+                <div class="skill-icon">🔄</div>
+                <div class="skill-name">Node.js</div>
+            </div>
+            <div class="skill">
+                <div class="skill-icon">🎨</div>
+                <div class="skill-name">UI/UX Design</div>
+            </div>
+            <div class="skill">
+                <div class="skill-icon">🌐</div>
+                <div class="skill-name">Three.js</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section contact">
+        <h2 class="section-title">Get In Touch</h2>
+        <p>Have a project in mind or just want to chat? Feel free to reach out using the form below and I'll get back to you as soon as possible.</p>
+        
+        <form class="contact-form">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" class="form-control" placeholder="Your Email" required>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Subject">
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" placeholder="Your Message" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+    </section>
+
+    <footer>
+        <div class="contact-left">
+            <h1 class="subtitle">Contact Me</h1>
+            <p> EMAIL: <a href="mailto:kellyvin868@gmail.com" style="text-decoration: none; color:white">kelkip5059@gmail.com</a> </p>
+            <p>TEL: <a href="tel:+254114895068" style="text-decoration: none; color:white"> +254-114895068</a></p>
+        </div>
+        <div class="kellycv">
+        <a href="images/CV.pdf" download  class="btn btn2" style="text-decoration: none;">Download CV</a>
+
+    </div>
+            <div class="social-icons">
+                <a href="https://facebook.com/"><img src="images/facebook.jpg" width="20" ></a>
+                <a href="https://twitter.com/"><img src="images/twitter.jpg" width="20" ></a>
+                <a href="https://instagram.com/"><img src="images/instagram.jpg" width="20" ></a>
+                <a href="https://whatsapp.com/"><img src="images/whatsapp.jpg" width="20" ></a>
+            </div>
+        <div class="social-links">
+            <a href="#" class="social-link">📘</a>
+            <a href="#" class="social-link">📷</a>
+            <a href="#" class="social-link">📱</a>
+            <a href="#" class="social-link">📝</a>
+        </div>
+        <p class="copyright">© 2025 Kelvin Kiprop. All Rights Reserved.</p>
+    </footer>
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // 3D background effect using Three.js
+        function init3DBackground() {
+            // Scene setup
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            document.getElementById('scene-container').appendChild(renderer.domElement);
+            
+            // Create particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 2000;
+            
+            const posArray = new Float32Array(particlesCount * 3);
+            
+            for (let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 15;
+            }
+            
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            
+            // Materials
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.05,
+                color: 0x64ffda
+            });
+            
+            // Mesh
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+            
+            // Camera position
+            camera.position.z = 5;
+            
+            // Mouse movement effect
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            function onDocumentMouseMove(event) {
+                mouseX = (event.clientX - window.innerWidth / 2) / 100;
+                mouseY = (event.clientY - window.innerHeight / 2) / 100;
+            }
+            
+            document.addEventListener('mousemove', onDocumentMouseMove);
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+            
+            // Animation
+            const animate = () => {
+                requestAnimationFrame(animate);
+                
+                particlesMesh.rotation.x += 0.001;
+                particlesMesh.rotation.y += 0.001;
+                
+                particlesMesh.rotation.x += mouseY * 0.01;
+                particlesMesh.rotation.y += mouseX * 0.01;
+                
+                renderer.render(scene, camera);
+            };
+            
+            animate();
+        }
+        
+        // Initialize 3D background when window loads
+        window.addEventListener('load', init3DBackground);
+        
+        // Project cards 3D effect
+        const cards = document.querySelectorAll('.project-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+            });
+        });
+        
+        // Form submission (prevent default for demo)
+        const form = document.querySelector('.contact-form');
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            alert('Message sent successfully! Kelvin will act on your message accordingly');
+            form.reset();
+        });
+    </script>
+</body>
+</html>
